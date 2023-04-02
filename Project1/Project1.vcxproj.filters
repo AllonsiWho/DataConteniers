@@ -18,5 +18,11 @@
     <ClCompile Include="list2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="List.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="List.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
