@@ -23,7 +23,7 @@ protected:
 		friend class UniqueTree;
 	}*Root;
 public:
-	Element* getRoot()
+	Element*& getRoot()
 	{
 		return Root;
 	}
@@ -88,7 +88,7 @@ public:
 		if (Root == nullptr) return 0;
 		else return Count(Root->pLeft) + Count(Root->pRight) + 1;
 	}
-
+	
 	int Sum(Element* Root)
 	{
 		if (Root == nullptr) return 0;
@@ -145,92 +145,111 @@ public:
 		 
 	}
 
-	void Erase(Element* Root, int value)
+	void Erase(Element*& Root, int value)
 	{
-		if (Root == nullptr) return;
-		if (Root->Data == value)
-		{	
-			if(Root->pRight==nullptr&&Root->pLeft==nullptr)
-			{
-			  delete Root;
-			 Root = nullptr;
-			 return;
-			}
-			if (Root->pRight != nullptr)
-			{
-				Root->Data = Root->pRight->Data;
-				delete Root->pRight;
-				Root->pRight = nullptr;
-			}
-			if (Root->pLeft != nullptr)
-			{
-				Root->Data = Root->pLeft->Data;
-				delete Root->pLeft;
-				Root->pLeft = nullptr;
-			}	
-		}
-		if (Root->Data < value)
-		{
-			Erase(Root->pRight, value);
-		}
-		if (Root->Data > value)
-		{
-			Erase(Root->pLeft, value);
-		}
-
-		//if (Root->pRight->Data == value)
-		//{
-		//	if (Root->pRight->pRight == nullptr && Root->pRight->pLeft == nullptr)
+		//if (Root == nullptr) return;
+		//if (Root->Data == value)
+		//{	
+		//	if(Root->pRight==nullptr&&Root->pLeft==nullptr)
 		//	{
+		//	  delete Root;
+		//	 Root = nullptr;
+		//	 return;
+		//	}
+		//	if (Root->pRight != nullptr)
+		//	{
+		//		Root->Data = Root->pRight->Data;
 		//		delete Root->pRight;
 		//		Root->pRight = nullptr;
 		//	}
-		//	if(Root->pRight->pRight!=nullptr&&Root->pRight->pLeft==nullptr)
+		//	if (Root->pLeft != nullptr)
 		//	{
-		//		delete Root->pRight;
-		//		Root->pRight = Root->pRight->pRight;
-		//	}
-		//	if (Root->pRight->pRight == nullptr && Root->pRight->pLeft != nullptr)
-		//	{
-		//		delete Root->pRight;
-		//		Root->pRight = Root->pRight->pLeft;
-		//	}
-		//	if (Root->pRight->pRight != nullptr && Root->pRight->pLeft != nullptr)
-		//	{
-		//		//в доработке
-		//		return;
-
-
-		//	}
-
-		//}
-		//if (Root->pLeft->Data == value)
-		//{
-		//	if (Root->pLeft->pRight == nullptr && Root->pLeft->pLeft == nullptr)
-		//	{
+		//		Root->Data = Root->pLeft->Data;
 		//		delete Root->pLeft;
 		//		Root->pLeft = nullptr;
-		//	}
-		//	if (Root->pLeft->pRight != nullptr && Root->pLeft->pLeft == nullptr)
-		//	{
-		//		delete Root->pLeft;
-		//		Root->pLeft = Root->pLeft->pRight;
-		//	}
-		//	if (Root->pLeft->pRight == nullptr && Root->pLeft->pLeft != nullptr)
-		//	{
-		//		delete Root->pLeft;
-		//		Root->pLeft = Root->pLeft->pLeft;
-		//	}
-		//	if (Root->pLeft->pRight != nullptr && Root->pLeft->pLeft != nullptr)
-		//	{
-		//		//в доработке
-		//		return;
-
-
-		//	}
-
+		//	}	
+		//}
+		//if (Root->Data < value)
+		//{
+		//	Erase(Root->pRight, value);
+		//}
+		//if (Root->Data > value)
+		//{
+		//	Erase(Root->pLeft, value);
 		//}
 
+		////if (Root->pRight->Data == value)
+		////{
+		////	if (Root->pRight->pRight == nullptr && Root->pRight->pLeft == nullptr)
+		////	{
+		////		delete Root->pRight;
+		////		Root->pRight = nullptr;
+		////	}
+		////	if(Root->pRight->pRight!=nullptr&&Root->pRight->pLeft==nullptr)
+		////	{
+		////		delete Root->pRight;
+		////		Root->pRight = Root->pRight->pRight;
+		////	}
+		////	if (Root->pRight->pRight == nullptr && Root->pRight->pLeft != nullptr)
+		////	{
+		////		delete Root->pRight;
+		////		Root->pRight = Root->pRight->pLeft;
+		////	}
+		////	if (Root->pRight->pRight != nullptr && Root->pRight->pLeft != nullptr)
+		////	{
+		////		//в доработке
+		////		return;
+
+		////	}
+		////}
+		////if (Root->pLeft->Data == value)
+		////{
+		////	if (Root->pLeft->pRight == nullptr && Root->pLeft->pLeft == nullptr)
+		////	{
+		////		delete Root->pLeft;
+		////		Root->pLeft = nullptr;
+		////	}
+		////	if (Root->pLeft->pRight != nullptr && Root->pLeft->pLeft == nullptr)
+		////	{
+		////		delete Root->pLeft;
+		////		Root->pLeft = Root->pLeft->pRight;
+		////	}
+		////	if (Root->pLeft->pRight == nullptr && Root->pLeft->pLeft != nullptr)
+		////	{
+		////		delete Root->pLeft;
+		////		Root->pLeft = Root->pLeft->pLeft;
+		////	}
+		////	if (Root->pLeft->pRight != nullptr && Root->pLeft->pLeft != nullptr)
+		////	{
+		////		//в доработке
+		////		return;
+		////	}
+		////}
+
+		if (Root == nullptr)return;
+		Erase(Root->pLeft, value);
+		Erase(Root->pRight, value);
+		if (value == Root->Data)
+		{
+			if (Root->pLeft==Root->pRight)
+			{
+				delete Root;
+				Root = nullptr;
+			}
+			else
+			{
+				if (Count(Root->pLeft) > Count(Root->pRight))
+				{
+					Root->Data = maxValue(Root->pLeft);
+					Erase(Root->pLeft, maxValue(Root->pLeft));
+				}
+				else
+				{
+					Root->Data = minValue(Root->pRight);
+					Erase(Root->pRight, minValue(Root->pRight));
+				}
+			}
+		}
 	}
 
 	
